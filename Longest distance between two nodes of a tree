@@ -1,0 +1,43 @@
+int n;
+
+pair<int,int> bfs(int u,vector<int>*adj){
+    int dis[n];
+    memset(dis,-1,sizeof(dis));
+    queue<int>q;
+    q.push(u);
+    dis[u]=0;
+    int node=0;
+    while(!q.empty()){
+        int x=q.front();
+        q.pop();
+        for(auto v:adj[x]){
+            if(dis[v]==-1) {
+            q.push(v);
+            dis[v]=dis[x]+1;
+            }
+        }
+    }
+    int mx=0;
+    for(int i=0;i<n;i++){
+        if(dis[i]>mx){
+            mx=dis[i];
+            node=i;
+        }
+    }
+    return {node,mx};
+}
+
+int Solution::solve(vector<int> &A){
+    n=A.size();
+    vector<int>adj[n];
+    for(int i=0;i<n;i++){
+        if(A[i]==-1) continue;
+        adj[A[i]].push_back(i);
+        adj[i].push_back(A[i]);
+    }
+    pair<int,int>t1,t2;
+    t1=bfs(0,adj);
+    t2=bfs(t1.first,adj);
+    return t2.second;
+}
+
