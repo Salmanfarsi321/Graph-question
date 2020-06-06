@@ -1,0 +1,39 @@
+Given any source point, (C, D) and destination point, (E, F) on a chess board, 
+we need to find whether Knight can move to the destination or not.
+what would be the minimum number of steps for the knight to move to the said point.
+If knight can not move from the source point to the destination point, then return -1.
+
+Note: A knight cannot go out of the board.
+
+int dx[8]={1,2,2,1,-1,-2,-2,-1};
+int dy[8]={-2,-1,1,2,2,1,-1,-2};
+
+int bfs(int n,int m,int x1,int y1,int x2,int y2){
+    queue<pair<int,pair<int,int> > >q;
+    map<pair<int,int>,bool>mp;
+    q.push({0,{x1,y1}});
+    while(!q.empty()){
+    int x=q.front().second.first;
+    int y=q.front().second.second;
+    int dis=q.front().first;
+    q.pop();
+    if(x==x2 && y==y2){
+        return dis;
+    }
+    if(mp.count({x,y})==true) continue;
+    mp[{x,y}]=true;
+    for(int i=0;i<8;i++){
+            int a=x+dx[i];
+            int b=y+dy[i];
+            if(a>0 && a<=n && b>0 && b<=m){
+                q.push({dis+1,{a,b}});
+            }
+        }
+    }
+    return -1;
+}
+
+int Solution::knight(int n, int m, int x1, int y1, int x2, int y2) {
+    int ans=bfs(n,m,x1,y1,x2,y2);
+    return ans;
+}
