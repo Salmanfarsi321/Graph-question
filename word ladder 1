@@ -1,0 +1,37 @@
+Given two words A and B, and a dictionary, C, find the length of shortest transformation sequence from A to B, such that:
+
+You must change exactly one character in every transformation.
+Each intermediate word must exist in the dictionary.
+Note:
+
+Return 0 if there is no such transformation sequence.
+All words have the same length.
+All words contain only lowercase alphabetic characters.
+
+int Solution::solve(string start, string end, vector<string> &dict){
+    unordered_map<string,bool>vis;
+    for(int i=0;i<dict.size();i++){
+        vis[dict[i]]=false;
+    }
+    queue<pair<string,int> >q;
+    q.push({start,0});
+    vis[start]=true;
+    while(!q.empty()){
+        string str=q.front().first;
+        int dis=q.front().second;
+        if(str==end) return dis+1;
+        q.pop();
+        for(int i=0;i<str.size();i++){
+                char ch=str[i];
+                for(int j=0;j<26;j++){
+                    str[i]='a'+j;
+                    if(vis.find(str)!=vis.end() && !vis[str]){
+                        q.push({str,dis+1});
+                        vis[str]=true;
+                    }
+                }
+                str[i]=ch;
+        }
+    }
+    return 0;
+}
