@@ -1,0 +1,59 @@
+/*Given a 2D board and a word, find if the word exists in the grid.
+
+The word can be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. The cell itself does not count as an adjacent cell.
+The same letter cell may be used more than once.
+
+Example :
+
+Given board =
+
+[
+  ["ABCE"],
+  ["SFCS"],
+  ["ADEE"]
+]
+word = "ABCCED", -> returns 1,
+word = "SEE", -> returns 1,
+word = "ABCB", -> returns 1,
+word = "ABFSAB" -> returns 1
+word = "ABCD" -> returns 0
+*/
+
+int dx[4]={1,-1,0,0};
+int dy[4]={0,0,1,-1};
+
+int bfs(int i,int j,int n,int m,vector<string> & A,string B){
+    queue<pair<pair<int,int>,int>>q;
+    q.push({{i,j},0});
+    while(!q.empty()){
+        int x=q.front().first.first;
+        int y=q.front().first.second;
+        int steps=q.front().second;
+        if(steps==B.size()-1) return 1;
+        q.pop();
+        for(int i=0;i<4;i++){
+            int a=x+dx[i];
+            int b=y+dy[i];
+            if(a>=0 && a<n && b>=0 && b<m){
+                if(B[steps+1]==A[a][b]){
+                    q.push({{a,b},steps+1});
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+int Solution::exist(vector<string> &A, string B) {
+    int n=A.size();
+    int m=A[0].size();
+    for(int i=0;i<A.size();i++){
+        for(int j=0;j<A[0].size();j++){
+            if(A[i][j]==B[0]){
+            if(bfs(i,j,n,m,A,B))
+            return 1;
+            }
+        }
+    }
+    return 0;
+}
